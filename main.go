@@ -21,6 +21,8 @@ func main() {
 		log.Fatal(err)
 	}
 
+	sheet.SetColumnWidth(3, 40)
+
 	row := sheet.AddRow()
 	row.AddCell().SetStr("col1")
 	row.AddCell().SetStr("col2")
