@@ -24,14 +24,28 @@ func main() {
 	sheet.SetColumnWidth(3, 40)
 
 	row := sheet.AddRow()
-	row.AddCell().SetStr("col1")
-	row.AddCell().SetStr("col2")
-	row.AddCell().SetStr("col3")
+	row.Height = 30
+	cell11 := row.AddCell()
+	cell11.XF.Alignment.Vertical = "top"
+	cell11.SetStr("col1")
+	cell12 := row.AddCell()
+	cell12.XF.Alignment.Vertical = "center"
+	cell12.SetStr("col2")
+	cell13 := row.AddCell()
+	cell13.XF.Alignment.Vertical = "bottom"
+	cell13.SetStr("col3")
 
 	row = sheet.AddRow()
-	row.AddCell().SetInt(1)
-	row.AddCell().SetInt(2)
-	row.AddCell().SetInt(3)
+	row.Height = 30
+	cell21 := row.AddCell()
+	cell21.XF.Alignment.Vertical = "center"
+	cell21.SetInt(1)
+	cell22 := row.AddCell()
+	cell22.XF.Alignment.Vertical = "center"
+	cell22.SetInt(2)
+	cell23 := row.AddCell()
+	cell23.XF.Alignment.Vertical = "center"
+	cell23.SetInt(3)
 
 	row = sheet.AddRow()
 	row.Height = 64
@@ -56,6 +70,37 @@ func main() {
 			Extension: filepath.Ext(fn),
 			Blob:      blob,
 		})
+	}
+
+	// Add a row to demonstrate merged cells
+	row = sheet.AddRow()
+	row.Height = 40
+	mergedCell := row.AddCell()
+	mergedCell.SetStr("This cell is merged across columns A-C")
+	mergedCell.XF.Alignment.Horizontal = "center"
+	mergedCell.XF.Alignment.Vertical = "center"
+	row.AddCell() // Empty cell that will be part of the merge
+	row.AddCell() // Empty cell that will be part of the merge
+
+	// Merge cells using string reference
+	err = sheet.Merge("A4:C4")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Add another row to demonstrate MergeRange
+	row = sheet.AddRow()
+	row.Height = 40
+	mergedCell2 := row.AddCell()
+	mergedCell2.SetStr("Merged using MergeRange")
+	mergedCell2.XF.Alignment.Horizontal = "center"
+	mergedCell2.XF.Alignment.Vertical = "center"
+	row.AddCell() // Empty cell
+
+	// Merge cells using coordinate-based API (columns 1-2, row 5)
+	err = sheet.MergeRange(1, 5, 2, 5)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	debugdir := "./testdata/dbg"
